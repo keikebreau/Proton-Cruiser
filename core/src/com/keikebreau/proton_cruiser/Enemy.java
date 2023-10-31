@@ -11,13 +11,8 @@ public abstract class Enemy extends GameObject {
 	public Enemy(float x, float y, float charge, Color color, ID id, Controller controller) {
 		super(x, y, SIZE, SIZE, charge, color, id, controller);
 	}
-	
-	/** Construct an Enemy without charge */
-	public Enemy(float x, float y, Color color, ID id, Controller controller) {
-		super(x, y, SIZE, SIZE, 0.0f, color, id, controller);
-	}
 
-	@Override
+    @Override
 	public void tick() {
 		bounds.x += velX;
 		bounds.y += velY;

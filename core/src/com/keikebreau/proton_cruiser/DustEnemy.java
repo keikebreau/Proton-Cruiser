@@ -7,7 +7,7 @@ public class DustEnemy extends Enemy {
 		POSITIVE (0.001f),
 		NEGATIVE (-0.001f);
 		
-		float charge;
+		final float charge;
 		
 		Charge(float charge) {
 			this.charge = charge;
@@ -25,7 +25,7 @@ public class DustEnemy extends Enemy {
 			}
 		}
 	}
-	private static float BASE_VEL = -3.0f;
+	private static final float BASE_VEL = -3.0f;
 	public DustEnemy(int x, int y, Controller controller) {
 		// Charge and color will be set later in this constructor.
 		super(x, y, 0.0f, null, ID.DUST, controller);

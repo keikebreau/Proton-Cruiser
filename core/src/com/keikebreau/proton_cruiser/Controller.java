@@ -2,7 +2,6 @@ package com.keikebreau.proton_cruiser;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 import java.util.Iterator;
@@ -10,23 +9,22 @@ import java.util.LinkedList;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Controller {
-    private Game game;
     /** The current player. */
     private Player player;
 
     /** A list of all objects in the game. */
-    private LinkedBlockingQueue<GameObject> objects;
+    private final LinkedBlockingQueue<GameObject> objects;
 
     /** A list of all objects to be removed in the next tick. */
-    private LinkedList<GameObject> removeList;
+    private final LinkedList<GameObject> removeList;
 
     /** A list of all objects to be added in the next tick. */
-    private LinkedList<GameObject> addList;
+    private final LinkedList<GameObject> addList;
 
     /** Array of booleans whose elements are true when the corresponding
      * key is pressed.
      */
-    private boolean[] keyDown = new boolean[6];
+    private final boolean[] keyDown = new boolean[6];
 
     private enum KEYS {
         UP,
@@ -34,14 +32,13 @@ public class Controller {
         RIGHT,
         LEFT,
         SPACE,
-        SHIFT;
+        SHIFT
     }
 
-    public Controller(Game game) {
-        this.game = game;
-        objects = new LinkedBlockingQueue<GameObject>();
-        removeList = new LinkedList<GameObject>();
-        addList = new LinkedList<GameObject>();
+    public Controller() {
+        objects = new LinkedBlockingQueue<>();
+        removeList = new LinkedList<>();
+        addList = new LinkedList<>();
     }
 
     /** Advance time for all game objects by one tick, adding new objects and
@@ -102,11 +99,6 @@ public class Controller {
     /** Immediately remove the object from the controller. */
     private synchronized void removeObject(GameObject object) {
         objects.remove(object);
-    }
-
-    /** Removes all non-player objects from the game. */
-    public void clearEnemies() {
-        objects.forEach(obj -> {if (obj.getId() != ID.PLAYER && obj.getId() != ID.BG_STAR) requestRemove(obj);});
     }
 
     public Player getPlayer() {

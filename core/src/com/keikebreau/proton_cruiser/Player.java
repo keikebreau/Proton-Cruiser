@@ -8,7 +8,7 @@ import static com.badlogic.gdx.math.MathUtils.clamp;
 public class Player extends GameObject {
 	
 	/** Radius of the player's circle. */
-	public static int SIZE = Game.WIDTH / 40;
+	public static final int SIZE = Game.WIDTH / 40;
 	
 	/** Color of the player's box. */
 	private static final Color COLOR = Color.WHITE;
@@ -71,10 +71,6 @@ public class Player extends GameObject {
 	
 	public void cruise() {
 		frameAccelFactor = 0.0f;
-	}
-	
-	public boolean isCruising() {
-		return frameAccelFactor == 0.0f;
 	}
 
 	public void loseFrameSpeed() {

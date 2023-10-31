@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
@@ -22,8 +21,8 @@ import java.util.Map;
 
 public class Game extends ApplicationAdapter {
 	AudioDevice audioDevice;
-	Map<String, Sound> soundMap = new HashMap<String, Sound>();
-	Map<String, Music> musicMap = new HashMap<String, Music>();
+	final Map<String, Sound> soundMap = new HashMap<>();
+	final Map<String, Music> musicMap = new HashMap<>();
 	private OrthographicCamera camera;
 	private PolygonSpriteBatch batch;
 	private ShapeRenderer shape;
@@ -33,35 +32,18 @@ public class Game extends ApplicationAdapter {
 	static final int WIDTH = 640;
 	static final int HEIGHT = 480;
 
-	/** Width of the health bar. */
-	static final int HUD_WIDTH = Game.WIDTH * 5 / 16;
 	/** Height of the health bar. */
 	static final int HUD_HEIGHT = Game.HEIGHT / 15;
 	/** X coordinate of the upper-left corner of the health bar. */
-	static int HUD_X = Game.WIDTH * 3 / 128;
+	static final int HUD_X = Game.WIDTH * 3 / 128;
 	/** Y coordinate of the upper-left corner of the health bar. */
-	static int HUD_Y = Game.HEIGHT / 32;
+	static final int HUD_Y = Game.HEIGHT / 32;
 
 	/** Handler for all game objects. */
 	private Controller controller;
 
-	/** Current score. */
-	private static float score = 0;
-
 	/** Current level. */
 	private static int level = 1;
-
-	/** All possible game difficulties. */
-	public enum Difficulty {
-		NORMAL,
-		HARD
-	};
-
-	public Difficulty difficulty;
-
-	public static float getScore() {
-		return score;
-	}
 
 	public static int getLevel() {
 		return level;
@@ -69,7 +51,7 @@ public class Game extends ApplicationAdapter {
 
 	@Override
 	public void create () {
-		controller = new Controller(this);
+		controller = new Controller();
 		spawner = new Spawn(controller, this);
 		batch = new PolygonSpriteBatch();
 		camera = new OrthographicCamera();
@@ -86,16 +68,19 @@ public class Game extends ApplicationAdapter {
 		try {
 			audioDevice = Gdx.audio.newAudioDevice(44100, false);
 		} catch (GdxRuntimeException e) {
-			e.printStackTrace();
-		};
-		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("multivac-ghost.ttf"));
+			System.err.println("Could not initialize audio device! Closing application");
+			dispose();
+			System.exit(1);
+		}
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("multivac-ghost.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 12;
 		font = generator.generateFont(parameter); // font size 12 pixels
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 
 		level = 1;
-		score = 0;
+		/** Current score. */
+		float score = 0;
 	}
 
 	@Override

@@ -5,5 +5,5 @@ public enum ID {
 	ELECTRON,
 	BG_STAR,
 	ANTIPROTON,
-	DUST;
+	DUST
 }
