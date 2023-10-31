@@ -3,6 +3,8 @@ package com.keikebreau.proton_cruiser;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
+import static com.badlogic.gdx.math.MathUtils.clamp;
+
 public class MoleculeEnemy extends Enemy {
 	/** Amount of [R, G, B] in the color of the particle, each from 0.0f to 1.0f. */
 	private float[] rgb;
@@ -44,9 +46,9 @@ public class MoleculeEnemy extends Enemy {
 		for (int i = 0; i < 3; ++i) {
 			// Increase or decrease values.
 			if (rgbUp[i]) {
-				rgb[i] = Game.clamp(rgb[i] + COLOR_VELOCITY, 0.0f, 1.0f);
+				rgb[i] = clamp(rgb[i] + COLOR_VELOCITY, 0.0f, 1.0f);
 			} else {
-				rgb[i] = Game.clamp(rgb[i] - COLOR_VELOCITY, 0.0f, 1.0f);
+				rgb[i] = clamp(rgb[i] - COLOR_VELOCITY, 0.0f, 1.0f);
 			}
 			// Set whether to increase values next tick.
 			if (rgb[i] <= 0.0f) {

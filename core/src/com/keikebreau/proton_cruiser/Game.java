@@ -59,24 +59,6 @@ public class Game extends ApplicationAdapter {
 
 	public Difficulty difficulty;
 
-	public static float clamp(float var, float min, float max) {
-		if (var >= max) {
-			return max;
-		} else if (var <= min) {
-			return min;
-		}
-		return var;
-	}
-
-	public static int clamp(int var, int min, int max) {
-		if (var >= max) {
-			return max;
-		} else if (var <= min) {
-			return min;
-		}
-		return var;
-	}
-
 	public static float getScore() {
 		return score;
 	}

@@ -3,6 +3,8 @@ package com.keikebreau.proton_cruiser;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 
+import static com.badlogic.gdx.math.MathUtils.clamp;
+
 public class Player extends GameObject {
 	
 	/** Radius of the player's circle. */
@@ -46,10 +48,10 @@ public class Player extends GameObject {
 		velY += accelY;
 		bounds.x += velX;
 		bounds.y += velY;
-		frameSpeed = Game.clamp(frameSpeed + frameAccelFactor, MIN_FRAME_SPEED, MAX_FRAME_SPEED);
-		hp = Game.clamp(hp + 1, 0, MAX_HP);
-		bounds.x = Game.clamp(bounds.x, 0, Game.WIDTH - SIZE);
-		bounds.y = Game.clamp(bounds.y, 0, Game.HEIGHT - SIZE);
+		frameSpeed = clamp(frameSpeed + frameAccelFactor, MIN_FRAME_SPEED, MAX_FRAME_SPEED);
+		hp = clamp(hp + 1, 0, MAX_HP);
+		bounds.x = clamp(bounds.x, 0, Game.WIDTH - SIZE);
+		bounds.y = clamp(bounds.y, 0, Game.HEIGHT - SIZE);
 		controller.handlePlayerInteractions();
 	}
 	
@@ -63,7 +65,7 @@ public class Player extends GameObject {
 	}
 	
 	public void loseHP(int removedHP) {
-		hp = Game.clamp(hp - removedHP, 0, Player.MAX_HP);
+		hp = clamp(hp - removedHP, 0, Player.MAX_HP);
 	}
 	
 	public float getFrameSpeed() {
@@ -95,6 +97,6 @@ public class Player extends GameObject {
 	}
 
 	public void loseFrameSpeed() {
-		frameSpeed = Game.clamp(frameSpeed - FRAME_SPEED_INC * 2, MIN_FRAME_SPEED, MAX_FRAME_SPEED);
+		frameSpeed = clamp(frameSpeed - FRAME_SPEED_INC * 2, MIN_FRAME_SPEED, MAX_FRAME_SPEED);
 	}
 }
