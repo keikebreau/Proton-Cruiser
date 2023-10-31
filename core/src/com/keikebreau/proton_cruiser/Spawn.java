@@ -41,9 +41,6 @@ public class Spawn {
 		if (tick % ticksPerDust == 0) {
 			spawnDust();
 		}
-		if (tick % ticksPerMolecule == 0) {
-			spawnMolecule();
-		}
 	}
 	
 	public void spawnPlayer() {
@@ -64,11 +61,7 @@ public class Spawn {
 	public void spawnDust() {
 		controller.requestAdd(new DustEnemy(Game.WIDTH - Enemy.SIZE, r.nextInt(Game.HEIGHT), controller));
 	}
-	
-	public void spawnMolecule() {
-		controller.requestAdd(new MoleculeEnemy(Game.WIDTH - Enemy.SIZE, r.nextInt(Game.HEIGHT), controller));
-	}
-	
+
 	public void reset() {
 		tick = 0;
 		ticksPerElectron = BASE_TICKS_PER_ELECTRON;

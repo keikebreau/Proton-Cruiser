@@ -28,15 +28,8 @@ public class Player extends GameObject {
 	/** Player's top speed. */
 	public static final float MAX_FRAME_SPEED = 0.999f;
 	
-	/** Player's maximum possible HP. */
-	public static int MAX_HP = 100;
-	
-	/** The player's remaining health points. */
-	private int hp;
-	
 	public Player(float x, float y, ID id, Controller controller) {
 		super(x, y, SIZE, SIZE, COLOR, id, controller);
-		hp = MAX_HP;
 		frameSpeed = MIN_FRAME_SPEED;
 		frameAccelFactor = 0.0f;
 	}
@@ -46,7 +39,6 @@ public class Player extends GameObject {
 		bounds.x += velX;
 		bounds.y += velY;
 		frameSpeed = clamp(frameSpeed + frameAccelFactor, MIN_FRAME_SPEED, MAX_FRAME_SPEED);
-		hp = clamp(hp + 1, 0, MAX_HP);
 		bounds.x = clamp(bounds.x, 0, Game.WIDTH - SIZE);
 		bounds.y = clamp(bounds.y, 0, Game.HEIGHT - SIZE);
 		controller.handlePlayerInteractions();
@@ -56,15 +48,7 @@ public class Player extends GameObject {
 	public Rectangle getBounds() {
 		return bounds;
 	}
-	
-	public int getHP() {
-		return hp;
-	}
-	
-	public void loseHP(int removedHP) {
-		hp = clamp(hp - removedHP, 0, Player.MAX_HP);
-	}
-	
+
 	public float getFrameSpeed() {
 		return frameSpeed;
 	}

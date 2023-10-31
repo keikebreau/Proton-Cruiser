@@ -116,23 +116,6 @@ public class Game extends ApplicationAdapter {
 		}
 
 		// Render the heads-up display
-		// Draw health bar background.
-		shape.setColor(Color.GRAY);
-		shape.begin(ShapeType.Filled);
-		shape.rect(HUD_X, HUD_Y, HUD_WIDTH, HUD_HEIGHT);
-		shape.end();
-		// Draw HP in health bar.
-		shape.setColor(0.3f, (float)(controller.getPlayer().getHP() / Player.MAX_HP), 0.0f, 1.0f);
-		shape.begin(ShapeType.Filled);
-		shape.rect(HUD_X, HUD_Y, ((float) (HUD_WIDTH * controller.getPlayer().getHP()) / Player.MAX_HP), HUD_HEIGHT);
-		shape.end();
-		// Draw health bar border.
-		shape.setColor(Color.WHITE);
-		shape.begin(ShapeType.Line);
-		shape.rect(HUD_X, HUD_Y, HUD_WIDTH, HUD_HEIGHT);
-		shape.end();
-		shape.flush();
-
 		// Draw current score.
 		batch.setProjectionMatrix(camera.combined);
 		String scoreStr = "Speed: " + controller.getPlayer().getFrameSpeed();

@@ -75,7 +75,6 @@ public class Controller {
                     player = (Player)obj;
                 case ELECTRON:
                 case DUST:
-                case MOLECULE:
                 case BG_STAR:
                 default:
             }
@@ -179,18 +178,13 @@ public class Controller {
             // collision detection code
             if (playerCenter.dst2(objCenter) <= (Player.SIZE + obj.bounds.width) / 2) {
                 switch (obj.getId()) {
-                    case BLACK_HOLE:
                     case ANTIPROTON:
-                        player.loseHP(Player.MAX_HP);
+                        // TODO: GAME OVER
                         return;
                     case ELECTRON:
-                        player.loseHP(2);
+                        // TODO: GAME OVER
                         break;
                     case DUST:
-                        player.loseHP(10);
-                        player.loseFrameSpeed();
-                        break;
-                    case MOLECULE:
                         player.loseFrameSpeed();
                         break;
                     default:
