@@ -34,29 +34,15 @@ public class Spawn {
 		ticksPerElectron = (int) (BASE_TICKS_PER_ELECTRON - 20 * frameSpeed);
 		ticksPerDust = ticksPerElectron * 3;
 		ticksPerMolecule = ticksPerElectron * 3;
-		
-		// Check to see if a spawned black hole is still present.
-		if (blackHoleSpawned && controller.getBlackHole() == null) {
-			blackHoleSpawned = false;
+
+		if (tick % ticksPerElectron == 0) {
+			spawnElectron();
 		}
-		
-		switch (Game.getLevel()) {
-		case 19:
-			if (!blackHoleSpawned) {
-				spawnBlackHole();
-				blackHoleSpawned = true;
-			}
-			// INTENTIONAL FALLTHROUGH
-		default:
-			if (tick % ticksPerElectron == 0) {
-				spawnElectron();
-			}
-			if (tick % ticksPerDust == 0) {
-				spawnDust();
-			}
-			if (tick % ticksPerMolecule == 0) {
-				spawnMolecule();
-			}
+		if (tick % ticksPerDust == 0) {
+			spawnDust();
+		}
+		if (tick % ticksPerMolecule == 0) {
+			spawnMolecule();
 		}
 	}
 	
@@ -81,10 +67,6 @@ public class Spawn {
 	
 	public void spawnMolecule() {
 		controller.requestAdd(new MoleculeEnemy(Game.WIDTH - Enemy.SIZE, r.nextInt(Game.HEIGHT), controller));
-	}
-	
-	public void spawnBlackHole() {
-		controller.requestAdd(new BlackHoleEnemy(Game.WIDTH / 2 - BlackHoleEnemy.WIDTH / 2, -BlackHoleEnemy.HEIGHT - 10, controller));
 	}
 	
 	public void reset() {

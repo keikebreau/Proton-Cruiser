@@ -23,8 +23,6 @@ public class AntiprotonEnemy extends GameObject {
 
 	@Override
 	public void tick() {
-		velX += accelX;
-		velY += accelY;
 		bounds.x += velX;
 		bounds.y += velY;
 		Player p = controller.getPlayer();

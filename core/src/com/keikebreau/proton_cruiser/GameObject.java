@@ -10,7 +10,6 @@ public abstract class GameObject {
 	protected Rectangle bounds;
 	protected ID id;
 	protected float velX, velY;
-	protected float accelX, accelY;
 	protected float charge;
 	protected Color color;
 	protected Controller controller;
@@ -70,28 +69,12 @@ public abstract class GameObject {
 		return id;
 	}
 	
-	public void addAccelX(float accelX) {
-		this.accelX += accelX;
-	}
-	
-	public void addAccelY(float accelY) {
-		this.accelY += accelY;
-	}
-	
 	public float getVelX() {
 		return velX;
 	}
 	
 	public float getVelY() {
 		return velY;
-	}
-	
-	public float getAccelX() {
-		return accelX;
-	}
-	
-	public float getAccelY() {
-		return accelY;
 	}
 	
 	public float getWidth() {

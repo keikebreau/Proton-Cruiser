@@ -44,8 +44,6 @@ public class Player extends GameObject {
 
 	@Override
 	public void tick() {
-		velX += accelX;
-		velY += accelY;
 		bounds.x += velX;
 		bounds.y += velY;
 		frameSpeed = clamp(frameSpeed + frameAccelFactor, MIN_FRAME_SPEED, MAX_FRAME_SPEED);

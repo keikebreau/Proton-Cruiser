@@ -14,9 +14,6 @@ public class Controller {
     /** The current player. */
     private Player player;
 
-    /** Black hole (if any) in frame. */
-    private BlackHoleEnemy blackHole;
-
     /** A list of all objects in the game. */
     private LinkedBlockingQueue<GameObject> objects;
 
@@ -58,7 +55,6 @@ public class Controller {
         addList.forEach(this::addObject);
         addList.clear();
         // ...Then advance time by a tick.
-        boolean blackHoleFound = false;
         for (Iterator<GameObject> iter = getObjectIterator(); iter.hasNext();) {
             // Remove objects that are off-screen and moving away from it.
             GameObject obj = iter.next();
@@ -75,10 +71,6 @@ public class Controller {
                 continue;
             }
             switch (obj.getId()) {
-                case BLACK_HOLE:
-                    blackHoleFound = true;
-                    blackHole = (BlackHoleEnemy)obj;
-                    break;
                 case PLAYER:
                     player = (Player)obj;
                 case ELECTRON:
@@ -87,28 +79,7 @@ public class Controller {
                 case BG_STAR:
                 default:
             }
-            if (blackHole != null
-                    && obj != blackHole
-                    && obj.getId() != ID.BG_STAR
-                    && obj.getId() != ID.ANTIPROTON) {
-                float scale = 1e5f;
-                float diffX = (blackHole.getCenterX() - obj.getCenterX());
-                float diffY = (blackHole.getCenterY() - obj.getCenterY());
-                float forceX = diffX / scale;
-                float forceY = diffY / scale;
-                obj.addAccelX(forceX);
-                obj.addAccelY(forceY);
-                if (obj.getId() != ID.PLAYER) {
-                    if (obj.getBounds().overlaps(blackHole.getBounds())) {
-                        requestRemove(obj);
-                    }
-                }
-            }
             obj.tick();
-        }
-        // Don't allow obsolete reference to black hole
-        if (!blackHoleFound) {
-            blackHole = null;
         }
 
         handleKeyPress();
@@ -137,15 +108,10 @@ public class Controller {
     /** Removes all non-player objects from the game. */
     public void clearEnemies() {
         objects.forEach(obj -> {if (obj.getId() != ID.PLAYER && obj.getId() != ID.BG_STAR) requestRemove(obj);});
-        blackHole = null;
     }
 
     public Player getPlayer() {
         return player;
-    }
-
-    public BlackHoleEnemy getBlackHole() {
-        return blackHole;
     }
 
     public Iterator<GameObject> getObjectIterator() {
@@ -186,12 +152,13 @@ public class Controller {
         if (keyDown[KEYS.SHIFT.ordinal()]) {
             player.slowDown();
         }
+        // Stop vertical movement if no vertical keys are pressed.
         if (!(keyDown[KEYS.UP.ordinal()] || keyDown[KEYS.DOWN.ordinal()])) {
-            player.addAccelY(-player.getAccelY());
+            player.velY = 0;
         }
         // Stop horizontal acceleration if no horizontal keys are pressed.
         if (!(keyDown[KEYS.LEFT.ordinal()] || keyDown[KEYS.RIGHT.ordinal()])) {
-            player.addAccelX(-player.getAccelX());
+            player.velX = 0;
         }
         // Stop frame acceleration if no frame keys are pressed.
         if (!(keyDown[KEYS.SPACE.ordinal()] || keyDown[KEYS.SHIFT.ordinal()])) {
@@ -237,32 +204,6 @@ public class Controller {
                     default:
                 }
             }
-        }
-        if (particleCount > 0) {
-            particleX /= particleCount;
-            particleY /= particleCount;
-            float diffX = particleX - player.getX();
-            float diffY = particleY - player.getY();
-            // Keep differences from getting to close to zero, for fear of a
-            // force explosion.
-            if (Math.abs(diffX) < 1) {
-                if (diffX > 0) {
-                    diffX = 1;
-                } else {
-                    diffX = -1;
-                }
-            }
-            if (Math.abs(diffY) < 1) {
-                if (diffY > 0) {
-                    diffY = 1;
-                } else {
-                    diffY = -1;
-                }
-            }
-            float forceX = (float) (particleCount * netCharge / Math.pow(diffX, 2));
-            float forceY = (float) (particleCount * netCharge / Math.pow(diffY, 2));
-            player.addAccelX(forceX);
-            player.addAccelY(forceY);
         }
     }
 }
