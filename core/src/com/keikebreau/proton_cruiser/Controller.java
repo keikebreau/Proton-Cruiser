@@ -110,6 +110,8 @@ public class Controller {
         if (!blackHoleFound) {
             blackHole = null;
         }
+
+        handleKeyPress();
     }
 
     /** Request that the given object be added during the next tick. */
@@ -150,63 +152,40 @@ public class Controller {
         return objects.iterator();
     }
 
-    public void handleKeyPress(int key) {
+    public void handleKeyPress() {
         // key events for player
         // Scale factor for acceleration: higher is smoother
         final int scale = 20;
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        keyDown[KEYS.UP.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.W);
+        keyDown[KEYS.DOWN.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.S);
+        keyDown[KEYS.LEFT.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.A);
+        keyDown[KEYS.RIGHT.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.D);
+        keyDown[KEYS.SHIFT.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+        keyDown[KEYS.SPACE.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.SPACE);
+        if (keyDown[KEYS.UP.ordinal()]) {
             // Close half the difference between max velocity and current velocity
             float diff = -5 - player.getVelY();
-            player.addAccelY(diff / scale);
-            keyDown[KEYS.UP.ordinal()] = true;
+            player.velY += diff / scale;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if (keyDown[KEYS.DOWN.ordinal()]) {
             // Close half the difference between max velocity and current velocity
             float diff = 5 - player.getVelY();
-            player.addAccelY(diff / scale);
-            keyDown[KEYS.DOWN.ordinal()] = true;
+            player.velY += diff / scale;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        if (keyDown[KEYS.LEFT.ordinal()]) {
             float diff = -5 - player.getVelX();
-            player.addAccelX(diff / scale);
-            keyDown[KEYS.LEFT.ordinal()] = true;
+            player.velX += diff / scale;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        if (keyDown[KEYS.RIGHT.ordinal()]) {
             float diff = 5 - player.getVelX();
-            player.addAccelX(diff / scale);
-            keyDown[KEYS.RIGHT.ordinal()] = true;
+            player.velX += diff / scale;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        if (keyDown[KEYS.SPACE.ordinal()]) {
             player.speedUp();
-            keyDown[KEYS.SPACE.ordinal()] = true;
         }
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
+        if (keyDown[KEYS.SHIFT.ordinal()]) {
             player.slowDown();
-            keyDown[KEYS.SHIFT.ordinal()] = true;
         }
-    }
-
-    public void handleKeyRelease(int key) {
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            keyDown[KEYS.UP.ordinal()] = false;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            keyDown[KEYS.DOWN.ordinal()] = false;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            keyDown[KEYS.LEFT.ordinal()] = false;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            keyDown[KEYS.RIGHT.ordinal()] = false;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            keyDown[KEYS.SPACE.ordinal()] = false;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT)) {
-            keyDown[KEYS.SHIFT.ordinal()] = false;
-        }
-
-        // Stop vertical acceleration if no vertical keys are pressed.
         if (!(keyDown[KEYS.UP.ordinal()] || keyDown[KEYS.DOWN.ordinal()])) {
             player.addAccelY(-player.getAccelY());
         }
