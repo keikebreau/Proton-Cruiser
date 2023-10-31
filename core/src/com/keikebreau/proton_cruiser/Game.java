@@ -135,7 +135,7 @@ public class Game extends ApplicationAdapter {
 
 		// Draw current score.
 		batch.setProjectionMatrix(camera.combined);
-		String scoreStr = "Speed: " + Game.getScore();
+		String scoreStr = "Speed: " + controller.getPlayer().getFrameSpeed();
 		String levelStr = "Level: " + Game.getLevel();
 		batch.begin();
 		font.draw(batch, scoreStr, HUD_X, HUD_Y + HUD_HEIGHT + 20);

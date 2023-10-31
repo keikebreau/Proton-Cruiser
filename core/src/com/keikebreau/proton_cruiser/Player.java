@@ -17,8 +17,7 @@ public class Player extends GameObject {
 	private float frameSpeed;
 	
 	/** Light speed acceleration/deceleration per tick (when activated) */
-	private static final float FRAME_SPEED_INC = 0.0001f;
-	//private static final float FRAME_SPEED_INC = 0.01f;
+	private static final float FRAME_SPEED_INC = 0.001f;
 	
 	/** Light speed acceleration/deceleration per tick (actual) */
 	private float frameAccelFactor;

@@ -120,8 +120,6 @@ public class Controller {
 
     public void handleKeyPress() {
         // key events for player
-        // Scale factor for acceleration: higher is smoother
-        final int scale = 20;
         keyDown[KEYS.UP.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.W);
         keyDown[KEYS.DOWN.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.S);
         keyDown[KEYS.LEFT.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.A);
@@ -129,22 +127,16 @@ public class Controller {
         keyDown[KEYS.SHIFT.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         keyDown[KEYS.SPACE.ordinal()] = Gdx.input.isKeyPressed(Input.Keys.SPACE);
         if (keyDown[KEYS.UP.ordinal()]) {
-            // Close half the difference between max velocity and current velocity
-            float diff = -5 - player.getVelY();
-            player.velY += diff / scale;
+            player.velY = 5;
         }
         if (keyDown[KEYS.DOWN.ordinal()]) {
-            // Close half the difference between max velocity and current velocity
-            float diff = 5 - player.getVelY();
-            player.velY += diff / scale;
+            player.velY = -5;
         }
         if (keyDown[KEYS.LEFT.ordinal()]) {
-            float diff = -5 - player.getVelX();
-            player.velX += diff / scale;
+            player.velX = -5;
         }
         if (keyDown[KEYS.RIGHT.ordinal()]) {
-            float diff = 5 - player.getVelX();
-            player.velX += diff / scale;
+            player.velX = 5;
         }
         if (keyDown[KEYS.SPACE.ordinal()]) {
             player.speedUp();
