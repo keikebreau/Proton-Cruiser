@@ -8,7 +8,7 @@ import static com.badlogic.gdx.math.MathUtils.clamp;
 public class Player extends GameObject {
 	
 	/** Radius of the player's circle. */
-	public static final int SIZE = Game.WIDTH / 80;
+	public static final int SIZE = GameScreen.WIDTH / 80;
 	
 	/** Color of the player's box. */
 	private static final Color COLOR = Color.WHITE;
@@ -39,8 +39,8 @@ public class Player extends GameObject {
 		bounds.x += velX;
 		bounds.y += velY;
 		frameSpeed = clamp(frameSpeed + frameAccelFactor, MIN_FRAME_SPEED, MAX_FRAME_SPEED);
-		bounds.x = clamp(bounds.x, 0, Game.WIDTH - SIZE);
-		bounds.y = clamp(bounds.y, 0, Game.HEIGHT - SIZE);
+		bounds.x = clamp(bounds.x, 0, GameScreen.WIDTH - SIZE);
+		bounds.y = clamp(bounds.y, 0, GameScreen.HEIGHT - SIZE);
 		controller.handlePlayerInteractions();
 	}
 	

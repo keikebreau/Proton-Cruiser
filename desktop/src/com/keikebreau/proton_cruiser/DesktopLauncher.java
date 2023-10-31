@@ -8,9 +8,9 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
-		config.setWindowedMode(Game.WIDTH, Game.HEIGHT);
+		config.setWindowedMode(GameScreen.WIDTH, GameScreen.HEIGHT);
 		config.useVsync(true);
 		config.setTitle("Proton Cruiser");
-		new Lwjgl3Application(new Game(), config);
+		new Lwjgl3Application(new ProtonCruiser(), config);
 	}
 }

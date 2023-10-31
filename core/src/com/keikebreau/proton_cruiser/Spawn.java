@@ -12,7 +12,7 @@ public class Spawn {
 	private int ticksPerElectron;
 	private int ticksPerDust;
 
-	public Spawn(Controller controller, Game game) {
+	public Spawn(Controller controller, GameScreen gameScreen) {
 		this.controller = controller;
 		tick = 0;
 		ticksPerElectron = BASE_TICKS_PER_ELECTRON;
@@ -37,16 +37,16 @@ public class Spawn {
 	}
 	
 	public void spawnPlayer() {
-		Player p = new Player((float) Game.WIDTH /2 - Player.SIZE, (float) Game.HEIGHT /2 - Player.SIZE, ID.PLAYER, controller);
+		Player p = new Player((float) GameScreen.WIDTH /2 - Player.SIZE, (float) GameScreen.HEIGHT /2 - Player.SIZE, ID.PLAYER, controller);
 		controller.requestAdd(p);
 	}
 
 	public void spawnElectron() {
-		controller.requestAdd(new ElectronEnemy(Game.WIDTH - Enemy.SIZE, r.nextInt(Game.HEIGHT), controller));
+		controller.requestAdd(new ElectronEnemy(GameScreen.WIDTH - Enemy.SIZE, r.nextInt(GameScreen.HEIGHT), controller));
 	}
 	
 	public void spawnDust() {
-		controller.requestAdd(new DustEnemy(Game.WIDTH - Enemy.SIZE, r.nextInt(Game.HEIGHT), controller));
+		controller.requestAdd(new DustEnemy(GameScreen.WIDTH - Enemy.SIZE, r.nextInt(GameScreen.HEIGHT), controller));
 	}
 
 }

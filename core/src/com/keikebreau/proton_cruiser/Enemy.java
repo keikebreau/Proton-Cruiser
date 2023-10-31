@@ -5,7 +5,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 /** All enemies have these basic fields and methods in common. */
 public abstract class Enemy extends GameObject {
-	public static final int SIZE = Game.WIDTH / 80;
+	public static final int SIZE = GameScreen.WIDTH / 80;
 
 	/** Construct an Enemy, possibly with charge */
 	public Enemy(float x, float y, float charge, Color color, ID id, Controller controller) {

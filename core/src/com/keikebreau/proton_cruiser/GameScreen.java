@@ -2,14 +2,11 @@ package com.keikebreau.proton_cruiser;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.AudioDevice;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.utils.GdxRuntimeException;
@@ -19,43 +16,41 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-public class Game extends ApplicationAdapter {
+public class GameScreen implements Screen {
+	final ProtonCruiser game;
 	AudioDevice audioDevice;
 	final Map<String, Sound> soundMap = new HashMap<>();
 	final Map<String, Music> musicMap = new HashMap<>();
 	private OrthographicCamera camera;
-	private PolygonSpriteBatch batch;
 	private ShapeRenderer shape;
-	private BitmapFont font;
 	private Spawn spawner;
 
 	static final int WIDTH = 1280;
 	static final int HEIGHT = 800;
 
 	/** Height of the health bar. */
-	static final int HUD_HEIGHT = Game.HEIGHT / 15;
+	static final int HUD_HEIGHT = GameScreen.HEIGHT / 15;
 	/** X coordinate of the upper-left corner of the health bar. */
-	static final int HUD_X = Game.WIDTH * 3 / 128;
+	static final int HUD_X = GameScreen.WIDTH * 3 / 128;
 	/** Y coordinate of the upper-left corner of the health bar. */
-	static final int HUD_Y = Game.HEIGHT / 32;
+	static final int HUD_Y = GameScreen.HEIGHT / 32;
 
 	/** Handler for all game objects. */
-	private Controller controller;
+	private final Controller controller;
 
 	/** Current level. */
-	private static int level = 1;
+	int level = 1;
+	int score = 0;
 
-	public static int getLevel() {
+	public int getLevel() {
 		return level;
 	}
 
-	@Override
-	public void create () {
-		controller = new Controller();
-		spawner = new Spawn(controller, this);
-		batch = new PolygonSpriteBatch();
-		camera = new OrthographicCamera();
-		camera.setToOrtho(false, WIDTH, HEIGHT);
+	public GameScreen(final ProtonCruiser game)
+	{
+		this.game = game;
+
+		// Load music and sound effects.
 		musicMap.put("music", Gdx.audio.newMusic(Gdx.files.internal("music.ogg")));
 		musicMap.put("menu", Gdx.audio.newMusic(Gdx.files.internal("menu.ogg")));
 		soundMap.put("bigBounce", Gdx.audio.newSound(Gdx.files.internal("bigBounce.ogg")));
@@ -63,8 +58,7 @@ public class Game extends ApplicationAdapter {
 		soundMap.put("click", Gdx.audio.newSound(Gdx.files.internal("click.ogg")));
 		soundMap.put("laser", Gdx.audio.newSound(Gdx.files.internal("laser.ogg")));
 		musicMap.get("music").setLooping(true);
-		musicMap.get("music").play();
-		shape = new ShapeRenderer();
+
 		try {
 			audioDevice = Gdx.audio.newAudioDevice(44100, false);
 		} catch (GdxRuntimeException e) {
@@ -72,21 +66,31 @@ public class Game extends ApplicationAdapter {
 			dispose();
 			System.exit(1);
 		}
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("multivac-ghost.ttf"));
-		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 24;
-		font = generator.generateFont(parameter); // font size 12 pixels
-		generator.dispose(); // don't forget to dispose to avoid memory leaks!
+
+		// create the camera and the SpriteBatch
+		camera = new OrthographicCamera();
+		camera.setToOrtho(false, WIDTH, HEIGHT);
+
+		controller = new Controller(game, this);
+		spawner = new Spawn(controller, this);
+
+		musicMap.get("music").play();
+		shape = new ShapeRenderer();
 
 		level = 1;
-		/** Current score. */
-		float score = 0;
+		score = 0;
 	}
 
 	@Override
-	public void render () {
+	public void show() {
+
+	}
+
+	@Override
+	public void render(float delta) {
 		controller.tick();
 		spawner.tick();
+		score += (int)(1000.0f * controller.getPlayer().getFrameSpeed());
 		ScreenUtils.clear(0.05f, 0.05f, 0.05f, 1);
 		camera.update();
 
@@ -102,20 +106,41 @@ public class Game extends ApplicationAdapter {
 
 		// Render the heads-up display
 		// Draw current score.
-		batch.setProjectionMatrix(camera.combined);
+		game.batch.setProjectionMatrix(camera.combined);
 		String scoreStr = "Speed: " + controller.getPlayer().getFrameSpeed();
-		String levelStr = "Level: " + Game.getLevel();
-		batch.begin();
-		font.draw(batch, scoreStr, HUD_X, HUD_Y + HUD_HEIGHT + 20);
+		String levelStr = "Level: " + level;
+		game.batch.begin();
+		game.font.draw(game.batch, scoreStr, HUD_X, HUD_Y + HUD_HEIGHT + 20);
 		// Draw current level.
-		font.draw(batch, levelStr, HUD_X, HUD_Y + HUD_HEIGHT + font.getLineHeight() + 20);
-		batch.end();
-		batch.flush();
+		game.font.draw(game.batch, levelStr, HUD_X, HUD_Y + HUD_HEIGHT + game.font.getLineHeight() + 20);
+		game.batch.end();
+		game.batch.flush();
 	}
-	
+
+	@Override
+	public void resize(int width, int height) {
+
+	}
+
+	@Override
+	public void pause() {
+
+	}
+
+	@Override
+	public void resume() {
+
+	}
+
+	@Override
+	public void hide() {
+
+	}
+
 	@Override
 	public void dispose () {
-		batch.dispose();
+		soundMap.values().forEach(Sound::dispose);
+		musicMap.values().forEach(Music::dispose);
 		audioDevice.dispose();
 	}
 }

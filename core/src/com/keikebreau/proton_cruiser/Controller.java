@@ -21,6 +21,9 @@ public class Controller {
     /** A list of all objects to be added in the next tick. */
     private final LinkedList<GameObject> addList;
 
+    private final ProtonCruiser game;
+    private final GameScreen gameScreen;
+
     /** Array of booleans whose elements are true when the corresponding
      * key is pressed.
      */
@@ -35,7 +38,9 @@ public class Controller {
         SHIFT
     }
 
-    public Controller() {
+    public Controller(final ProtonCruiser game, final GameScreen gameScreen) {
+        this.game = game;
+        this.gameScreen = gameScreen;
         objects = new LinkedBlockingQueue<>();
         removeList = new LinkedList<>();
         addList = new LinkedList<>();
@@ -60,9 +65,9 @@ public class Controller {
             float objDX = obj.getVelX();
             float objDY = obj.getVelY();
             boolean offLeft = objX + obj.getWidth() < 0 && objDX < 0;
-            boolean offRight = objX - obj.getWidth() > Game.WIDTH && objDX > 0;
+            boolean offRight = objX - obj.getWidth() > GameScreen.WIDTH && objDX > 0;
             boolean offTop = objY + obj.getHeight() < 0 && objDY < 0;
-            boolean offBottom = objY - obj.getHeight() > Game.HEIGHT && objDY > 0;
+            boolean offBottom = objY - obj.getHeight() > GameScreen.HEIGHT && objDY > 0;
             if (offLeft || offRight || offTop || offBottom) {
                 requestRemove(obj);
                 continue;
@@ -171,11 +176,10 @@ public class Controller {
             if (playerCenter.dst2(objCenter) <= (Player.SIZE + obj.bounds.width) / 2) {
                 switch (obj.getId()) {
                     case ANTIPROTON:
-                        // TODO: GAME OVER
-                        return;
                     case ELECTRON:
-                        // TODO: GAME OVER
-                        break;
+                        game.setScreen(new GameOverScreen(game, gameScreen.score));
+                        gameScreen.dispose();
+                        return;
                     case DUST:
                         player.loseFrameSpeed();
                         break;
