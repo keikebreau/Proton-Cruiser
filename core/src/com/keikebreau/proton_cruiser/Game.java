@@ -29,8 +29,8 @@ public class Game extends ApplicationAdapter {
 	private BitmapFont font;
 	private Spawn spawner;
 
-	static final int WIDTH = 640;
-	static final int HEIGHT = 480;
+	static final int WIDTH = 1280;
+	static final int HEIGHT = 800;
 
 	/** Height of the health bar. */
 	static final int HUD_HEIGHT = Game.HEIGHT / 15;
@@ -74,7 +74,7 @@ public class Game extends ApplicationAdapter {
 		}
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("multivac-ghost.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 12;
+		parameter.size = 24;
 		font = generator.generateFont(parameter); // font size 12 pixels
 		generator.dispose(); // don't forget to dispose to avoid memory leaks!
 

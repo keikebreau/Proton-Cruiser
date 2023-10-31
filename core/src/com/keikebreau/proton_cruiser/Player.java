@@ -8,7 +8,7 @@ import static com.badlogic.gdx.math.MathUtils.clamp;
 public class Player extends GameObject {
 	
 	/** Radius of the player's circle. */
-	public static final int SIZE = Game.WIDTH / 40;
+	public static final int SIZE = Game.WIDTH / 80;
 	
 	/** Color of the player's box. */
 	private static final Color COLOR = Color.WHITE;
